@@ -5,10 +5,21 @@
 
 // Dependências
 const http = require('http')
+const url = require('url')
 
 // O server deve responder aos req com uma string
 const server = http.createServer((req, res) => {
+  // Get e parse a URL 
+  const parsedURL = url.parse(req.url, true)
+  // Get path
+  const path = parsedURL.pathname
+  const trimmedPath = path.replace(/^\/+|\/+$/g,'')
+  // Mandar response
   res.end('Hello World!\n')
+
+  // Log o request path
+  console.log('Request recebido no path:', trimmedPath)
+  
 })
 
 server.listen(3000, () => {
