@@ -10,19 +10,22 @@ const url = require('url')
 // O server deve responder aos req com uma string
 const server = http.createServer((req, res) => {
   // Get e parse a URL 
-  const parsedURL = url.parse(req.url, true)
+  const parsedUrl = url.parse(req.url, true)
   // Get path
-  const path = parsedURL.pathname
+  const path = parsedUrl.pathname
   const trimmedPath = path.replace(/^\/+|\/+$/g,'')
 
   // Get método HTTP
-  const method = req.method.toLowerCase();
+  const method = req.method.toLowerCase()
+
+  // Get a query string como um objeto
+  const queryStringObject = parsedUrl.query
 
   // Mandar response
   res.end('Hello World!\n')
 
   // Log o request path
-  console.log(`Request recebido no path: ${trimmedPath} com o método: ${method}`)
+  console.log(`Request recebido no path: ${trimmedPath} com o método: ${method} e com esses parâmetros query string`, queryStringObject)
   
 })
 
