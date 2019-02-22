@@ -31,6 +31,7 @@ const server = http.createServer((req, res) => {
   req.on('data', (data) => {
     buffer += decoder.write(data)
   })
+
   req.on('end', () => {
     buffer += decoder.end()
 
@@ -49,24 +50,22 @@ const server = http.createServer((req, res) => {
     // Rotear a requisição para o handler especificado no router
     chosenHandler(data, (statusCode, payload) => {
       // Usar o status code called back pelo o handler, ou o default 200
-      statusCode = typeof(statusCode) == 'number' ? statusCode : 200
+      statusCode = typeof(statusCode) === 'number' ? statusCode : 200
 
       // Usar o payload called back pelo o handler, ou o default objeto vazio
-      payload = typeof(payload) == 'object' ? payload : {}
+      payload = typeof(payload) === 'object' ? payload : {}
 
       // Converter o payload para string
       const payloadString = JSON.stringify(payload)
 
       // Retornar a resposta
+      res.setHeader('Content-Type', 'application/json')
       res.writeHead(statusCode)
-
-      // Mandar response
       res.end(payloadString)
       
       // Log a response
       console.log(`Retornando a resposta:`, statusCode,payloadString)
     })
-
   })
 })
 
@@ -88,7 +87,7 @@ handlers.notFound = function(data, callback) {
   callback(404)
 }
 
-// Definir os request routers
+// Definir o request routers
 const router = {
   'sample': handlers.sample
 }
