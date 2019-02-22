@@ -5,12 +5,37 @@
 
 // Dependências
 const http = require('http')
+const https = require('https')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecode
 const config = require('./config')
+const fs = require('fs')
 
-// O server deve responder aos req com uma string
-const server = http.createServer((req, res) => {
+// Instanciando o server HTTP
+const httpServer = http.createServer((req, res) => {
+  unifiedServer(req, res)
+})
+// Startar o server, e fazê-lo ouvir a porta 3000
+httpServer.listen(config.httpPort, () => {
+  console.log(`O server está escutando a porta ${config.httpPort}`)  
+})
+
+// Instanciar o servidor HTTPS
+const httpsServerOptions = {
+  'key': fs.readFileSync('./https/key.pem'),
+  'cert': fs.readFileSync('./https/cert.pem')
+}
+const httpsServer = https.createServer(httpsServerOptions,(req, res) => {
+  unifiedServer(req, res)
+})
+// Startar o HTTPS server
+httpsServer.listen(config.httpsPort, () => {
+  console.log(`O server está escutando a porta ${config.httpsPort}`)  
+})
+
+// Lógica do servidor para os servidores http e https
+const unifiedServer = function(req, res) {
+  
   // Get e parse a URL 
   const parsedUrl = url.parse(req.url, true)
   // Get path
@@ -68,12 +93,7 @@ const server = http.createServer((req, res) => {
       console.log(`Retornando a resposta:`, statusCode,payloadString)
     })
   })
-})
-
-// Startar o server, e fazê-lo ouvir a porta 3000
-server.listen(config.port, () => {
-  console.log(`O server está escutando a porta ${config.port} no ambiente ${config.envName}`)  
-})
+}
 
 // Definir handlers
 const handlers = {}
@@ -87,8 +107,13 @@ handlers.sample = function(data, callback) {
 handlers.notFound = function(data, callback) {
   callback(404)
 }
-
+// Ping
+handlers.ping = function(data, callback){
+  callback(200)
+}
 // Definir o request routers
 const router = {
-  'sample': handlers.sample
+  'sample': handlers.sample,
+  'ping': handlers.ping
 }
+
