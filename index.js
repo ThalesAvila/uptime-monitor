@@ -7,7 +7,7 @@
 const http = require('http')
 const https = require('https')
 const url = require('url')
-const StringDecoder = require('string_decoder').StringDecode
+const StringDecoder = require('string_decoder').StringDecoder
 const config = require('./config')
 const fs = require('fs')
 
@@ -53,6 +53,7 @@ const unifiedServer = function(req, res) {
   
   // Get payload, se ele existir
   const decoder = new StringDecoder('utf-8')
+
   let buffer = ''
   req.on('data', (data) => {
     buffer += decoder.write(data)
@@ -98,11 +99,6 @@ const unifiedServer = function(req, res) {
 // Definir handlers
 const handlers = {}
 
-// Sample Handler
-handlers.sample = function(data, callback) {
-  // Callback um http status code, e um payload object
-  callback(406, {'name': 'sample handler'})
-}
 // Not found handler
 handlers.notFound = function(data, callback) {
   callback(404)
@@ -113,7 +109,6 @@ handlers.ping = function(data, callback){
 }
 // Definir o request routers
 const router = {
-  'sample': handlers.sample,
   'ping': handlers.ping
 }
 
