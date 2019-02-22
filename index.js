@@ -6,7 +6,8 @@
 // Dependências
 const http = require('http')
 const url = require('url')
-const StringDecoder = require('string_decoder').StringDecoder
+const StringDecoder = require('string_decoder').StringDecode
+const config = require('./config')
 
 // O server deve responder aos req com uma string
 const server = http.createServer((req, res) => {
@@ -70,8 +71,8 @@ const server = http.createServer((req, res) => {
 })
 
 // Startar o server, e fazê-lo ouvir a porta 3000
-server.listen(3000, () => {
-  console.log("O server está escutando a porta 3000")  
+server.listen(config.port, () => {
+  console.log(`O server está escutando a porta ${config.port} no ambiente ${config.envName}`)  
 })
 
 // Definir handlers
