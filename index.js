@@ -10,14 +10,6 @@ const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
 const config = require('./config')
 const fs = require('fs')
-const _data = require('./lib/data')
-
-// TESTANDO
-// @TODO deletar isto
-_data.update('test','newFile', {'fizz':'buzz'}, (err) => {
-  console.log('Este foi o error', err)  
-})
-
 
 // Instanciando o server HTTP
 const httpServer = http.createServer((req, res) => {
