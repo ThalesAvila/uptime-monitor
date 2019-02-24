@@ -14,8 +14,8 @@ const _data = require('./lib/data')
 
 // TESTANDO
 // @TODO deletar isto
-_data.create('test','newFile',{'foo':'bar'}, (err) => {
-  console.log('Este foi o error', err)  
+_data.read('test','newFile1', (err, data) => {
+  console.log('Este foi o error', err, 'e estes foram os dados', data)  
 })
 
 
